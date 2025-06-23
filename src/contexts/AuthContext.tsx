@@ -15,6 +15,7 @@ export interface User {
   eventsOrganized?: number;
   totalVolunteers?: number;
   joinedAt: Date;
+  isVerified?: boolean;
 }
 
 interface AuthContextType {
@@ -23,6 +24,7 @@ interface AuthContextType {
   signup: (userData: Omit<User, 'id' | 'joinedAt'> & { password: string }) => Promise<boolean>;
   logout: () => void;
   isLoading: boolean;
+  updateUser: (updates: Partial<User>) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -52,6 +54,7 @@ const mockUsers: (User & { password: string })[] = [
     eventsOrganized: 15,
     totalVolunteers: 247,
     joinedAt: new Date('2023-03-10'),
+    isVerified: true,
   },
 ];
 
@@ -120,6 +123,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       eventsOrganized: userData.role === 'organizer' ? 0 : undefined,
       totalVolunteers: userData.role === 'organizer' ? 0 : undefined,
       joinedAt: new Date(),
+      isVerified: false,
     };
     
     // Add to mock users (in real app, this would be an API call)
@@ -131,13 +135,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return true;
   };
 
+  const updateUser = (updates: Partial<User>) => {
+    if (user) {
+      const updatedUser = { ...user, ...updates };
+      setUser(updatedUser);
+      localStorage.setItem('waveai_user', JSON.stringify(updatedUser));
+    }
+  };
+
   const logout = () => {
     setUser(null);
     localStorage.removeItem('waveai_user');
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, signup, logout, isLoading }}>
+    <AuthContext.Provider value={{ user, login, signup, logout, isLoading, updateUser }}>
       {children}
     </AuthContext.Provider>
   );

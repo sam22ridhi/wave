@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Home, Calendar, User, BarChart3, MessageCircle, Users } from 'lucide-react';
+import { Home, Calendar, User, BarChart3, MessageCircle, Users, Heart, Image } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 
 export default function MobileNav() {
@@ -18,7 +18,7 @@ export default function MobileNav() {
         { path: '/', icon: Home, label: 'Home' },
         { path: '/events', icon: Calendar, label: 'Events' },
         { path: '/volunteer', icon: User, label: 'Dashboard' },
-        { path: '/analytics', icon: BarChart3, label: 'Impact' },
+        { path: '/donations', icon: Heart, label: 'Donations' },
         { path: '/assistant', icon: MessageCircle, label: 'AI Chat' },
       ];
     } else {
@@ -26,7 +26,7 @@ export default function MobileNav() {
         { path: '/', icon: Home, label: 'Home' },
         { path: '/events', icon: Calendar, label: 'Events' },
         { path: '/organizer', icon: Users, label: 'Dashboard' },
-        { path: '/analytics', icon: BarChart3, label: 'Analytics' },
+        { path: '/donations', icon: Heart, label: 'Donations' },
         { path: '/assistant', icon: MessageCircle, label: 'AI Chat' },
       ];
     }

@@ -13,6 +13,8 @@ import GamificationHub from './pages/GamificationHub';
 import VendorPortal from './pages/VendorPortal';
 import ImpactAnalytics from './pages/ImpactAnalytics';
 import AIAssistant from './pages/AIAssistant';
+import DonationHub from './pages/DonationHub';
+import Gallery from './pages/Gallery';
 
 function App() {
   return (
@@ -20,6 +22,7 @@ function App() {
       <Route path="/auth" element={<Auth />} />
       <Route path="/" element={<Layout />}>
         <Route index element={<Landing />} />
+        <Route path="gallery" element={<Gallery />} />
         <Route path="volunteer" element={
           <ProtectedRoute requiredRole="volunteer">
             <VolunteerDashboard />
@@ -63,6 +66,11 @@ function App() {
         <Route path="assistant" element={
           <ProtectedRoute>
             <AIAssistant />
+          </ProtectedRoute>
+        } />
+        <Route path="donations" element={
+          <ProtectedRoute>
+            <DonationHub />
           </ProtectedRoute>
         } />
       </Route>

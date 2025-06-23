@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, Sun, Moon, Waves, LogOut, User, Settings } from 'lucide-react';
+import { Menu, Sun, Moon, Waves, LogOut, User, Settings, Shield } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -23,21 +23,27 @@ export default function Header({ onMenuClick }: HeaderProps) {
   }
 
   const getNavItems = () => {
-    if (!user) return [];
+    if (!user) return [
+      { path: '/gallery', label: 'Gallery' },
+    ];
     
     if (user.role === 'volunteer') {
       return [
         { path: '/events', label: 'Events' },
         { path: '/volunteer', label: 'Dashboard' },
         { path: '/gamification', label: 'Achievements' },
+        { path: '/donations', label: 'Donations' },
         { path: '/analytics', label: 'Impact' },
+        { path: '/gallery', label: 'Gallery' },
       ];
     } else {
       return [
         { path: '/organizer', label: 'Dashboard' },
         { path: '/events', label: 'Events' },
+        { path: '/donations', label: 'Donations' },
         { path: '/analytics', label: 'Analytics' },
         { path: '/content', label: 'Content' },
+        { path: '/gallery', label: 'Gallery' },
       ];
     }
   };
@@ -98,8 +104,13 @@ export default function Header({ onMenuClick }: HeaderProps) {
                     </span>
                   </div>
                   <div className="text-left">
-                    <div className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                      {user.name}
+                    <div className="flex items-center">
+                      <div className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                        {user.name}
+                      </div>
+                      {user.isVerified && user.role === 'organizer' && (
+                        <Shield className="h-4 w-4 text-green-500 ml-1" title="Verified Organizer" />
+                      )}
                     </div>
                     <div className="text-xs text-gray-500 dark:text-gray-400 capitalize">
                       {user.role}

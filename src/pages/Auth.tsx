@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Eye, EyeOff, Waves, Mail, Lock, User, Building, Sparkles, Shield } from 'lucide-react';
 import { useAuth, UserRole } from '../contexts/AuthContext';
+import AadhaarVerification from '../components/AadhaarVerification';
 
 export default function Auth() {
   const [isLogin, setIsLogin] = useState(true);
@@ -9,6 +10,7 @@ export default function Auth() {
   const [selectedRole, setSelectedRole] = useState<UserRole>('volunteer');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+  const [showVerification, setShowVerification] = useState(false);
   
   const [formData, setFormData] = useState({
     name: '',
@@ -18,7 +20,7 @@ export default function Auth() {
     organizationName: '',
   });
 
-  const { login, signup } = useAuth();
+  const { login, signup, updateUser } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   
@@ -44,6 +46,13 @@ export default function Auth() {
           return;
         }
 
+        if (selectedRole === 'organizer') {
+          // Show Aadhaar verification for organizers
+          setShowVerification(true);
+          setIsLoading(false);
+          return;
+        }
+
         const success = await signup({
           name: formData.name,
           email: formData.email,
@@ -63,6 +72,31 @@ export default function Auth() {
       setError('An error occurred. Please try again.');
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleVerificationComplete = async (verified: boolean) => {
+    if (verified) {
+      const success = await signup({
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+        role: selectedRole,
+        organizationName: formData.organizationName,
+        avatar: '🏢',
+        isVerified: true,
+      });
+
+      if (success) {
+        setShowVerification(false);
+        navigate('/organizer', { replace: true });
+      } else {
+        setError('User already exists with this email');
+        setShowVerification(false);
+      }
+    } else {
+      setShowVerification(false);
+      setError('Verification failed. Please try again.');
     }
   };
 
@@ -160,6 +194,18 @@ export default function Auth() {
                   <div className="text-xs text-gray-600 dark:text-gray-400">Create events</div>
                 </button>
               </div>
+              
+              {selectedRole === 'organizer' && !isLogin && (
+                <div className="mt-3 p-3 bg-green-50 dark:bg-green-900 rounded-lg">
+                  <div className="flex items-start">
+                    <Shield className="h-4 w-4 text-green-600 dark:text-green-400 mt-0.5 mr-2" />
+                    <div className="text-sm text-green-800 dark:text-green-200">
+                      <p className="font-medium">Verification Required</p>
+                      <p className="text-xs mt-1">Organizers undergo Aadhaar-based verification for community trust and security.</p>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           )}
 
@@ -285,7 +331,7 @@ export default function Auth() {
                   {isLogin ? 'Signing In...' : 'Creating Account...'}
                 </div>
               ) : (
-                isLogin ? 'Sign In' : 'Create Account'
+                isLogin ? 'Sign In' : (selectedRole === 'organizer' ? 'Proceed to Verification' : 'Create Account')
               )}
             </button>
           </form>
@@ -295,8 +341,8 @@ export default function Auth() {
             <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-xl border border-blue-200 dark:border-blue-800">
               <p className="text-sm font-medium text-blue-800 dark:text-blue-200 mb-2">Demo Credentials:</p>
               <div className="text-xs text-blue-600 dark:text-blue-300 space-y-1">
-                <div><strong>Volunteer:</strong> kavya@example.com / password123</div>
-                <div><strong>Organizer:</strong> arjun@example.com / password123</div>
+                <div><strong>Volunteer:</strong> ritika@example.com / password123</div>
+                <div><strong>Verified Organizer:</strong> sam@example.com / password123</div>
               </div>
             </div>
           )}
@@ -312,6 +358,12 @@ export default function Auth() {
           </div>
         </div>
       </div>
+
+      {/* Aadhaar Verification Modal */}
+      <AadhaarVerification
+        isVisible={showVerification}
+        onVerificationComplete={handleVerificationComplete}
+      />
     </div>
   );
 }

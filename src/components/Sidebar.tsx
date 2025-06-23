@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { X, Home, User, Calendar, Camera, Settings, Gamepad2, Store, BarChart3, MessageCircle, Users, Palette, Shield } from 'lucide-react';
+import { X, Home, User, Calendar, Camera, Settings, Gamepad2, Store, BarChart3, MessageCircle, Users, Palette, Shield, Heart, Image } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 
 interface SidebarProps {
@@ -18,13 +18,18 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   }
 
   const getMenuItems = () => {
-    if (!user) return [];
+    if (!user) return [
+      { path: '/', icon: Home, label: 'Home' },
+      { path: '/gallery', icon: Image, label: 'Gallery' },
+    ];
 
     const commonItems = [
       { path: '/', icon: Home, label: 'Home' },
       { path: '/events', icon: Calendar, label: 'Event Discovery' },
       { path: '/cleanup', icon: Camera, label: 'Live Cleanup' },
+      { path: '/donations', icon: Heart, label: 'Donations' },
       { path: '/analytics', icon: BarChart3, label: 'Impact Analytics' },
+      { path: '/gallery', icon: Image, label: 'Gallery' },
       { path: '/assistant', icon: MessageCircle, label: 'AI Assistant' },
     ];
 
@@ -35,7 +40,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
         ...commonItems.slice(1, 3), // Events, Cleanup
         { path: '/gamification', icon: Gamepad2, label: 'Gamification Hub' },
         { path: '/vendor', icon: Store, label: 'Vendor Portal' },
-        ...commonItems.slice(3), // Analytics, Assistant
+        ...commonItems.slice(3), // Donations, Analytics, Gallery, Assistant
       ];
     } else {
       return [
@@ -44,7 +49,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
         ...commonItems.slice(1, 3), // Events, Cleanup
         { path: '/content', icon: Palette, label: 'Content Studio' },
         { path: '/vendor', icon: Store, label: 'Vendor Portal' },
-        ...commonItems.slice(3), // Analytics, Assistant
+        ...commonItems.slice(3), // Donations, Analytics, Gallery, Assistant
       ];
     }
   };
@@ -87,9 +92,14 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                 </span>
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
-                  {user.name}
-                </p>
+                <div className="flex items-center">
+                  <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
+                    {user.name}
+                  </p>
+                  {user.isVerified && user.role === 'organizer' && (
+                    <Shield className="h-4 w-4 text-green-500 ml-1" title="Verified Organizer" />
+                  )}
+                </div>
                 <div className="flex items-center space-x-2">
                   <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
                     user.role === 'volunteer' 
@@ -104,7 +114,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                     ) : (
                       <>
                         <Users className="h-3 w-3 mr-1" />
-                        Organizer
+                        {user.isVerified ? 'Verified Organizer' : 'Organizer'}
                       </>
                     )}
                   </span>
