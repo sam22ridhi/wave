@@ -263,56 +263,6 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* Donation Impact Section */}
-      <section className="py-24 bg-white dark:bg-gray-900">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-4">
-              Transparent Impact Through Donations
-            </h2>
-            <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-              Support verified environmental initiatives and see exactly how your contributions create lasting change.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-            <div className="text-center p-8 bg-gradient-to-br from-pink-50 to-rose-50 dark:from-pink-900 dark:to-rose-900 rounded-2xl">
-              <div className="w-16 h-16 bg-gradient-to-r from-pink-500 to-rose-500 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                <Heart className="h-8 w-8 text-white" />
-              </div>
-              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">₹12.4L</h3>
-              <p className="text-gray-600 dark:text-gray-400">Total Donations Raised</p>
-            </div>
-            
-            <div className="text-center p-8 bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900 dark:to-emerald-900 rounded-2xl">
-              <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-emerald-500 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                <Shield className="h-8 w-8 text-white" />
-              </div>
-              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">47</h3>
-              <p className="text-gray-600 dark:text-gray-400">Verified Organizers</p>
-            </div>
-            
-            <div className="text-center p-8 bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-900 dark:to-cyan-900 rounded-2xl">
-              <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                <Award className="h-8 w-8 text-white" />
-              </div>
-              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">156</h3>
-              <p className="text-gray-600 dark:text-gray-400">Active Donation Drives</p>
-            </div>
-          </div>
-
-          <div className="text-center">
-            <Link
-              to="/donations"
-              className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white font-semibold rounded-full transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl"
-            >
-              <Heart className="mr-2 h-5 w-5" />
-              Support Environmental Causes
-            </Link>
-          </div>
-        </div>
-      </section>
-
       {/* CTA Section */}
       <section className="py-24 bg-gradient-to-r from-ocean-500 to-wave-500">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
